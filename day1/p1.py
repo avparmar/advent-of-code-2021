@@ -1,4 +1,4 @@
-with open('inputs/input.txt') as input:
+with open('inputs/p1/input.txt') as input:
   inputList = input.read().split("\n")
   input.close()
   
