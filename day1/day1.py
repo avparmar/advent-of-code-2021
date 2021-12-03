@@ -7,9 +7,8 @@ increases = 0
 for i, measurement in enumerate(inputList):
   if i == 0:
     continue
-  if inputList[i] > inputList[i-1]:
+  if int(inputList[i]) > int(inputList[i-1]):
     increases+=1
-
 print(increases)
     
   
