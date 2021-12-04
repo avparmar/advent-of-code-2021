@@ -18,16 +18,21 @@ for line in boardsRaw:
     i = 0
 
 def markAndCheckBoard(board, call):
+  if len(board[0]) == 6:
+    return False
   for i in range(5):
     for j in range(5):
       if board[i][j] == call:
         board[i][j] = -1
+  winner = False
   for i in range(5):
     if sum(board[i]) == -5:
-      return True
+      winner = True
     if sum(list(map(lambda ls : ls[i], board))) == -5:
-      return True
-  return False
+      winner = True
+  if winner == True:
+    board[0].append(0)
+  return winner
   
 def countBoard(board):
   sum = 0
@@ -37,13 +42,12 @@ def countBoard(board):
         sum+=board[i][j]
   return sum
 
-winner = False
-i = 0
-while winner is False:
-  call = calls[i]
-  i+=1
-
+lastWinner = (0,0, [])
+count = 1
+for index, call in enumerate(calls):
   for board in boards:
     if (markAndCheckBoard(board, call)):
-      winner = True
-      print(countBoard(board) * call)
+      count+=1
+      lastWinner = (countBoard(board), call, board)
+
+print(lastWinner[0] * lastWinner[1])
