@@ -4,47 +4,42 @@ with open('inputs/p1/input.txt') as input:
   rows = [x for x in input.read().strip().split("\n")]
   input.close()
 
-coords = set()
+template = rows[0]
+rules = {}
 
-folds = []
+strptr = 0
 
-for row in rows:
+for row in rows[2::]:
   if not row:
     continue
-  if row[0] == 'f':
-    if row.find('x') == -1:
-      folds.append(('y', int(row[row.find('=') + 1:])))
+  a, b = row.split(' -> ')
+  rules[a] = b
+
+#print(template)
+for i in range(10):
+  strptr = 0
+  newStr = template
+  for j, char in enumerate(template):
+    if j == 0:
+      #newStr += char
+      continue
+    prevChar = template[j-1]
+    curr = char
+    if prevChar + curr in rules:
+      strptr += 1
+      #print(j, strptr, newStr[:j-1 + strptr:], rules[prevChar + curr], newStr[j-1+ strptr::], newStr[:j-1 + strptr:] + rules[prevChar + curr] + newStr[j-1+ strptr:])
+      newStr = newStr[:j-1 + strptr:] + rules[prevChar + curr] + newStr[j-1+ strptr::]
     else:
-      folds.append(('x', int(row[row.find('=') + 1:])))
-  else:
-    a, b = row.split(',')
-    coords.add((int(a), int(b)))
+      strptr +=0
+  #print(newStr)
+  template = newStr
 
-#print(len(coords))
+#print(newStr)
+cts = defaultdict(int)
 
-if folds[0][0] == 'y':
-  newCoords = set()
-  for coord in coords:
-    #print(coord)
-    newY = coord[1]
-    #print("fold:", folds[0][1])
-    #print("y:", coord[1])
-    if coord[1] > folds[0][1]:
-      newY = folds[0][1] + folds[0][1] - coord[1]
-    #print("->", (coord[0], newY))
-    newCoords.add((coord[0], newY))
-  coords = newCoords
-else:
-  newCoords = set()
-  for coord in coords:
-    #print(coord, folds[0][1])
-    newX = coord[0]
-    if coord[0] > folds[0][1]:
-      newX = folds[0][1] + folds[0][1] - coord[0]
-    #print("->", (newX, coord[1]))
-    newCoords.add((newX, coord[1]))
-  coords = newCoords
+for char in template:
+  cts[char] += 1
 
-#print(coords)
-print(len(coords))
+print(cts)
 
+3115 - 921
